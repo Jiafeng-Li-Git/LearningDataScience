@@ -16,19 +16,26 @@ def readbook(book, index, target_df):
     indexSeries = pd.Series(dtype = str)
     ii = target_df.shape[0]
 
+    t = int(len(segmets)/200)
     tar = 0
     result = ""
-    i = 0
-    while (i < 200) & (tar < len(segmets)-100):
-        for j in range(100):
+    i, x = 0, 0
+    while (i < 200) & (i < t):
+        x = 0
+        if tar >= len(segmets):
+            break
+        while x <= 200:
+            if tar >= len(segmets):
+                break
             if re.search("[a-zA-Z*]", segmets[tar]):
                 result = result + segmets[tar] + " "
+                x = x + 1
             tar = tar + 1
-        indexSeries = indexSeries.append(pd.Series({ii + i: index}))
-        contentSeries = contentSeries.append(pd.Series({ii + i: result}))
+        if x >= 99:
+            indexSeries = indexSeries.append(pd.Series({ii + i: index}))
+            contentSeries = contentSeries.append(pd.Series({ii + i: result}))
         result = ""
         i = i + 1
-
     contents = pd.DataFrame({'Index': indexSeries, 'Content': contentSeries})
     target_df = target_df.append(contents)
     return target_df
@@ -45,7 +52,7 @@ def tokenizeFilter(target_df, iloc):
         if word not in stop_words:
             filtered_words.append(word)
     fdist = FreqDist(filtered_words)
-    return fdist
+    return fdist, filtered_words
 
 
 target_df = pd.DataFrame()
@@ -61,5 +68,5 @@ print(target_df)
 
 nltk.download()
 target_df.insert(target_df.shape[1], "fdist", 0)
-fdist = tokenizeFilter(target_df, 0)
+fdist, filtered_words = tokenizeFilter(target_df, 0)
 print(fdist.most_common(50))
