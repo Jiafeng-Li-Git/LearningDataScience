@@ -4,6 +4,7 @@ import pandas as pd
 import nltk
 from nltk.probability import FreqDist
 from nltk.corpus import stopwords
+import matplotlib.pyplot as plt
 
 
 # create 200 partitions of the book. Each partition has 100 words.
@@ -70,3 +71,5 @@ nltk.download()
 target_df.insert(target_df.shape[1], "fdist", 0)
 fdist, filtered_words = tokenizeFilter(target_df, 0)
 print(fdist.most_common(50))
+fdist.plot(30, cumulative=False)
+plt.show()
