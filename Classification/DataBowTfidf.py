@@ -6,11 +6,11 @@ from sklearn.feature_extraction.text import TfidfTransformer
 
 
 # return BOW vector
-def BOWprocess(target_df, i):
+def BOWprocess(target_df):
     tar_list = target_df["Content"].tolist()
     count_vect = CountVectorizer(stop_words="english")
-    X_train_counts = count_vect.fit_transform([tar_list[i]])
-    return X_train_counts.toarray()[:, 0:25]
+    X_train_counts = count_vect.fit_transform(tar_list)
+    return X_train_counts.toarray()
 
 
 # return TFIDF matrix
@@ -21,12 +21,7 @@ def TFIDFprocess(BOWmatrix):
 
 
 target_df = DataPreprocess.target_df
-bow_mat = BOWprocess(target_df, 0)
-# get BOW matrix by combining vectors
-for i in range(1, target_df.shape[0]):
-    tran_arr = BOWprocess(target_df, i)
-    if len(tran_arr[0]) == 25:
-        bow_mat = np.concatenate((bow_mat, tran_arr), axis=0)
+bow_mat = BOWprocess(target_df)
 tfidf_mat = TFIDFprocess(bow_mat)
 label_mat = target_df["Index"].tolist()
 
