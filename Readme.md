@@ -1,5 +1,5 @@
 # Readme file
 
-It's about self-study of data science.
+It's about a repository of data science. I am having data science course from university, so this is where I practice.
 
-Including classification.
+Including classification and clustering.
